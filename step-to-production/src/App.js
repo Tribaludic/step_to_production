@@ -14,6 +14,7 @@ import { Checkbox } from 'primereact/checkbox';
 import { Mention } from 'primereact/mention';
 import { MultiSelect } from 'primereact/multiselect';
 import { FileUpload } from 'primereact/fileupload';
+import {Button} from "primereact/button";
 
 function App() {
 
@@ -72,6 +73,17 @@ function App() {
   const [teamDevBSuggestions, setTeamDevBSuggestions] = useState([]);
   const [teamTestsSuggestions, setTeamTestsSuggestions] = useState([]);
   const [teamPassProdBSuggestions, setTeamPassProdBSuggestions] = useState([]);
+  const [saveLoading, setSaveLoading] = useState(false);
+
+  const onSave = () => {
+
+    setSaveLoading(true);
+
+    setTimeout(() => {
+      setSaveLoading(false);
+      console.log(formatDate(solicitudDate));
+    }, 2000);
+  }
 
   const onDatabaseChange = (e) => {
     let selecteddatabases = [...databases];
@@ -81,6 +93,20 @@ function App() {
       selecteddatabases.splice(selecteddatabases.indexOf(e.value), 1);
 
     setDatabases(selecteddatabases);
+  }
+
+  function formatDate(date) {
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
   }
 
   function onChangeProductType(e) {
@@ -311,11 +337,11 @@ function App() {
                 <div className="field col-12 md:col-4">
                   <label>BASES DE DATOS</label>
                   <div className="col">
-                    <Checkbox inputId="cbOracle" value="New York" onChange={onDatabaseChange} checked={databases.includes('New York')}></Checkbox>
+                    <Checkbox inputId="cbOracle" value="New York" onChange={onDatabaseChange} checked={databases.includes('New York')}/>
                     <label htmlFor="cbOracle" className="p-checkbox-label ml-2">Oracle</label>
                   </div>
                   <div className="col mt-2">
-                    <Checkbox inputId="cbSqlServer" value="San Francisco" onChange={onDatabaseChange} checked={databases.includes('San Francisco')}></Checkbox>
+                    <Checkbox inputId="cbSqlServer" value="San Francisco" onChange={onDatabaseChange} checked={databases.includes('San Francisco')}/>
                     <label htmlFor="cbSqlServer" className="p-checkbox-label  ml-2">Microsoft SQL Server</label>
                   </div>
                 </div>
@@ -436,8 +462,16 @@ function App() {
             </div>
 
           </div>
+
+
+
+
+        </div>
+        <div className="surface-900 text-center p-3 mb-3">
+          <Button label="Save" icon="pi pi-save" loading={saveLoading} onClick={onSave}/>
         </div>
       </div>
+
     </div>
   );
 }
